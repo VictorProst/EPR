@@ -137,81 +137,7 @@ while (1)
             
             %Automatic Dismantling of Mt Simmons
             if(Ctask == 1)
-                
-                %Display on the GUI the current task
-                if(~strcmp(currentTask,'Dismantle Mt Simmons'))
-                    currentTask = 'Dismantle Mt Simmons';
-                    set(f_currentTask, 'String', currentTask);
-                    %keeping the count of the passage in the loop to move on to
-                    %Task 2 at a certain point
-                    countCollectSnow = countCollectSnow + 1;
-                    achievePosMt = 0;
-                end
-                
-                %Move to Mt Simmons Collecting Snow Area
-                if(achievePosMt == 0)
-                    MoveToMtSimmons(newxPos, newyPos, newAngle);
-                else
-                    
-                    %After we arrived to Mt Simmons
-                    if (collectSnow == 1)
-                        
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Collecting Snow'))
-                            currentSubTask = 'Collecting Snow';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToCollect = 0; %Wait to have the good orientation to collect snow
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        
-                        if(readyToCollect == 0)
-                            %Orientate the robot in front of the debris to collect
-                            DebrisRobotOrientation(newxPos, newyPos, newAngle);
-                        else
-                            %Collect Snow&Debris
-                            ScoopSnow();
-                        end
-                    end
-                    
-                    %Dump the scoop full of Snow&Debris
-                    if (dumpSnow == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Dumping Snow'))
-                            currentSubTask = 'Dumping Snow';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToDumpSnow = 0; %Wait to have the good orientation to dump snow
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(readyToDumpSnow == 0)
-                            %Move the robot in front of the Truck to Dump the Snow
-                            MoveToSnowTruck(newxPos, newyPos, newAngle);
-                        else
-                            %Dump the snow in the truck&shaking
-                            DumpSnow();
-                        end
-                    end
-                    
-                    if(dumpDebris == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Dumping Debris'))
-                            currentSubTask = 'Dumping Debris';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToDumpDebris = 0; %Wait to have the good orientation to dump debris
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(readyToDumpDebris == 0)
-                            %Move the robot in front of the Truck to Dump the
-                            %Debris and if there is no debris go back to Mt Simmons
-                            MoveToDebrisTruck();
-                        else
-                            %Dump the debris in the truck & go back to Mt Simmons
-                            DumpDebris()
-                        end
-                    end
-                end
+                ExcecuteTask1(newxPos, newyPos, newAngle);
             end
             
             %Stop Task 1 and move to Task 2
@@ -222,144 +148,11 @@ while (1)
             
             %Automatic Tree removal
             if(Ctask == 2)
-                %Display on the GUI the current task
-                if(~strcmp(currentTask,'Clear Tree'))
-                    currentTask = 'Clear Tree';
-                    set(f_currentTask, 'String', currentTask);
-                    %keeping the count of the passage in the loop to move on to
-                    %Task 2 at a certain point
-                    achievePosTree = 0;
-                end
-                
-                %Move to Mt Simmons Collecting Snow Area
-                if(achievePosTree == 0)
-                    MoveToTree(newxPos, newyPos, newAngle);
-                else
-                    
-                    if(removeTree == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Lift Tree'))
-                            currentSubTask = 'Lift Tree';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToLift = 0; %Wait to have the good orientation to collect snow
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(readyToLift == 0)
-                            %Orientate the robot in front of the tree to lift
-                            TreeRobotOrientation(newxPos, newyPos, newAngle);
-                        else
-                            %Lift Tree
-                            LiftTree()
-                        end
-                    end
-                    
-                    if(dumpTree == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Release Tree'))
-                            currentSubTask = 'Release Tree';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(SuccessLiftTree()==1)
-                            %Display on the GUI the current display
-                            if(~strcmp(currentDisplay,'Tree acquired'))
-                                currentDisplay = 'Tree acquired';
-                                set(f_currentSubTask, 'String', currentSubTask);
-                                readyToReleaseTree = 0; %Wait to have reached the good
-                                %area to release the tree
-                            end
-                            
-                            if(readyToReleaseTree == 0)
-                                %Orientate the robot to the tree clearance area
-                                TreeReleaseRobotOrientation(newxPos, newyPos, newAngle);
-                            else
-                                %Release Tree
-                                ReleaseTree()
-                            end
-                        else
-                            %Display on the GUI the current display
-                            if(~strcmp(currentDisplay,'Tree not acquired'))
-                                currentDisplay = 'Tree not acquired';
-                                set(f_currentSubTask, 'String', currentSubTask);
-                                readyToClear = 0; %Wait to have the scoop in a
-                                %good configuration to clear the tree
-                            end
-                            
-                            if(readyToClear == 0)
-                                %Orientate the robot to clear the tree
-                                TreeClearanceRobotOrientation(newxPos, newyPos, newAngle);
-                            else
-                                %Release Tree
-                                ClearTree()
-                            end
-                        end
-                    end
-                end
+                ExcecuteTask2(newxPos, newyPos, newAngle)
             end
             
             if(Ctask ==3)
-                %Display on the GUI the current task
-                if(~strcmp(currentTask,'Clear Roof'))
-                    currentTask = 'Clear Roof';
-                    set(f_currentTask, 'String', currentTask);
-                    achievePosTree = 0;
-                end
-                
-                %Move to Mt Simmons Collecting Snow Area
-                if(achievePosTree == 0)
-                    MoveToRoof(newxPos, newyPos, newAngle);
-                else
-                    if(clearRoofLeft == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Clear Left Roof'))
-                            currentSubTask = 'Clear Left Roof';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToClearRoof = 0; %Wait to have the good orientation to clear the snow
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(readyToClearRoof == 0)
-                            %Orientate the robot in front of the left part of the roof
-                            RoofLeftRobotOrientation(newxPos, newyPos, newAngle);
-                        else
-                            %Clear the snow from the roof
-                            ClearRoofLeft()
-                        end
-                    end
-                    
-                    if(clearRoofRight == 1)
-                        %Display on the GUI the current sub task
-                        if(~strcmp(currentSubTask,'Clear Right Roof'))
-                            currentSubTask = 'Clear Right Roof';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            readyToClearRoof = 0; %Wait to have the good orientation to collect snow
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        
-                        if(readyToClearRoof == 0)
-                            %Orientate the robot in front of the left part of the roof
-                            RoofRightRobotOrientation(newxPos, newyPos, newAngle);
-                        else
-                            %Clear the snow from the roof
-                            ClearRoofRight()
-                        end
-                    end
-                    
-                    if(roofCleaned == 1)
-                        %Display on the GUI the current feedback from the robot
-                        if(~strcmp(currentSubTask,'Roof is cleaned'))
-                            currentSubTask = 'Roof is cleaned';
-                            set(f_currentSubTask, 'String', currentSubTask);
-                            newCommand = 1; %Set the position commands to the Robot
-                        end
-                        %Move back the robot from the house
-                        MoveBack(newxPos, newyPos, newAngle);
-                    end
-                    
-                end
-                
+                ExcecuteTask3(newxPos, newyPos, newAngle)
             end
         end
     catch
@@ -374,4 +167,6 @@ delete(serialConnection);
 display('Serial Connection gracefully closed!');
 
 end
+
+
 
